@@ -5,9 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import reactor.core.publisher.Mono;
 
 @SpringBootApplication
 public class ConsumingRestApplication {
@@ -18,15 +19,16 @@ public class ConsumingRestApplication {
 	}
 
 	@Bean
-	public RestTemplate restTemplate(RestTemplateBuilder builder) {
-		return builder.build();
+	public WebClient webClient(WebClient.Builder webClientBuilder) {
+		return webClientBuilder.build();
 	}
 
 	@Bean
-	public CommandLineRunner run(RestTemplate template) throws Exception {
+	public CommandLineRunner run(WebClient client) throws Exception {
 		return args -> {
-			Quote quote = template.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
-			log.info(quote.toString());
+			Mono<Quote> quote = client.get().uri("https://gturnquist-quoters.cfapps.io/api/random").retrieve()
+					.bodyToMono(Quote.class);
+			log.info(quote.block().toString());
 		};
 	}
 

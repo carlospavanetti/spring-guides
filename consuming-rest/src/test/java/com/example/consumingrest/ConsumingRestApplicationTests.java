@@ -5,16 +5,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 @SpringBootTest
 class ConsumingRestApplicationTests {
 	@Autowired
-	private RestTemplate template;
+	private WebClient client;
 
 	@Test
 	void contextLoads() {
-		assertThat(template).isNotNull();
+		assertThat(client).isNotNull();
 	}
 
 }
