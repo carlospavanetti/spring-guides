@@ -1,19 +1,16 @@
 package com.example.restservice;
 
-public class Greeting {
-    private final long id;
-    private final String content;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.google.auto.value.AutoValue;
 
-    public Greeting(long id, String content) {
-        this.id = id;
-        this.content = content;
+@AutoValue
+public abstract class Greeting {
+    @JsonCreator
+    static Greeting create(long id, String content) {
+        return new AutoValue_Greeting(id, content);
     }
 
-    public long getId() {
-        return id;
-    }
+    public abstract long getId();
 
-    public String getContent() {
-        return content;
-    }
+    public abstract String getContent();
 }
